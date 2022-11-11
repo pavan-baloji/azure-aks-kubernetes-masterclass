@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp2deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp2
+  template:
+    metadata:
+      name: my-webapp2
+      labels:
+        app: myapp2
+    spec:
+      containers:
+      - name: myappcontainer
+        image: pavanbaloji/k8webapidemoapp:1.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-webapp
+  labels:
+    app: my-webapp
+spec:
+  containers:
+  - name: my-webapp
+    image: pavanbaloji/k8webapidemoapp:1.0
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80

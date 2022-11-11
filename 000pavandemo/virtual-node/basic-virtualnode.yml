@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basic-virtualnode-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: basic-virtualnode
+  template:
+    metadata:
+      labels:
+        app: basic-virtualnode
+    spec:
+      containers:
+      - name: basic-virtualnode-pod
+        image: stacksimplify/kube-nginxapp1:1.0.0
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        kubernetes.io/role: agent
+        beta.kubernetes.io/os: linux
+        type: virtual-kubelet
+      tolerations:
+      - key: virtual-kubelet.io/provider
+        operator: Exists
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: virtualnode-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: basic-virtualnode
+  ports:
+  - port: 80
+    targetPort: 80
+

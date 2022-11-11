@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-addon-deployment
+spec:
+  selector:
+    matchLabels:
+      app: myapp-nginx-app
+  template:
+    metadata:
+      labels:
+        app: myapp-nginx-app
+    spec:
+      containers:
+      - name: myapp
+        image: stacksimplify/kube-nginxapp1:1.0.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-nginx-app-svc
+spec:
+  selector:
+    app: myapp-nginx-app
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-nginx-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - host: app1.9c1e1cadb3cd4ed989c3.eastus.aksapp.io
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: myapp-nginx-app-svc
+            port: 
+              number: 80
+

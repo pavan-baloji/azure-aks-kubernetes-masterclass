@@ -1,0 +1,7 @@
+{
+    "tenantId": "93f33571-550f-43cf-b09f-cd331338d086",
+    "subscriptionId": "fd9ec759-1a45-42d5-91aa-5423983f4d79",
+    "resourceGroup": "az-aks-demo-rg",
+    "useManagedIdentityExtension": true,
+    "userAssignedIdentityID": "3c508c1b-ab0a-4ac7-a30d-654741c7845d"
+  }

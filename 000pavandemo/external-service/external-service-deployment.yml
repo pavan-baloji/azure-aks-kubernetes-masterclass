@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: externalapiservice
+spec:
+  type: ExternalName
+  externalName: pavandemoapiservice.azurewebsites.net
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-with-ext-svc
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend-app2
+  template:
+    metadata:
+      labels:
+        app: frontend-app2
+    spec:
+      containers:
+      - name: frontendapp2
+        image: pavanbaloji/demofrontendapp:4.0
+        env:
+          - name: WebAPIBaseUrl
+            value: "http://externalapiservice"
+          - name: ASPNETCORE_ENVIRONMENT 
+            value: Development
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontendsvc2
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend-app2
+  ports:
+  - port: 80
+    targetPort: 80
+
+
